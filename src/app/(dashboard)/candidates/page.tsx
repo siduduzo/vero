@@ -1,6 +1,11 @@
+import type { Prisma } from "@prisma/client";
 import CandidatesClient from "./candidates-client";
 
-async function getCandidates(search?: string) {
+type CandidateRow = Prisma.CandidateGetPayload<{
+  include: { applications: { include: { job: true } } };
+}>;
+
+async function getCandidates(search?: string): Promise<CandidateRow[]> {
   try {
     const { prisma } = await import("@/lib/prisma");
     return await prisma.candidate.findMany({
