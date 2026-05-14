@@ -1,65 +1,141 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+function VeroLogo({ dark = false }: { dark?: boolean }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 rounded-xl bg-[#0F7B6C] flex items-center justify-center flex-shrink-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="w-6 h-6">
+          <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <span className={`text-2xl font-semibold tracking-tight ${dark ? "text-[#2D3F4A]" : "text-white"}`}>
+        vero
+      </span>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"recruiter" | "client">("recruiter");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 700));
+    router.push(role === "client" ? "/client/dashboard" : "/dashboard");
+  }
+
+  return (
+    <div className="flex h-screen">
+      {/* Left panel */}
+      <div className="hidden lg:flex w-1/2 bg-[#2D3F4A] flex-col justify-between p-12">
+        <VeroLogo />
+
+        <div>
+          <h2 className="text-white text-4xl font-bold leading-tight mb-4">
+            True hiring,
+            <br />
+            powered by AI
+          </h2>
+          <p className="text-[#8fa8b8] text-lg mb-12">
+            Match the right candidates to the right roles — faster than ever before.
           </p>
+
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { value: "81%", label: "Match accuracy" },
+              { value: "3x", label: "Faster shortlist" },
+              { value: "248", label: "Active candidates" },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-[#243540] rounded-2xl p-5">
+                <p className="text-[#0F7B6C] text-3xl font-bold mb-1">{stat.value}</p>
+                <p className="text-[#8fa8b8] text-sm">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <p className="text-[#4a6070] text-sm">© 2026 Vero. True hiring, powered by AI.</p>
+      </div>
+
+      {/* Right panel */}
+      <div className="flex-1 flex items-center justify-center bg-white px-8">
+        <div className="w-full max-w-md">
+          <div className="mb-10 lg:hidden">
+            <VeroLogo dark />
+          </div>
+
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Sign in</h1>
+          <p className="text-gray-500 mb-8">Welcome back to Vero</p>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0F7B6C] focus:border-transparent text-gray-900 placeholder-gray-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0F7B6C] focus:border-transparent text-gray-900 placeholder-gray-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                I am a
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {(["recruiter", "client"] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    className={`py-3 px-4 rounded-xl border-2 text-sm font-medium capitalize transition-all ${
+                      role === r
+                        ? "border-[#0F7B6C] bg-[#0F7B6C]/10 text-[#0F7B6C]"
+                        : "border-gray-200 text-gray-500 hover:border-gray-300"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-[#0F7B6C] hover:bg-[#0a6659] disabled:opacity-60 text-white font-semibold rounded-xl transition-colors mt-2"
+            >
+              {loading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
