@@ -122,3 +122,19 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
+
+model ScrapedJob {
+  id          String    @id @default(cuid())
+  externalId  String?
+  title       String
+  company     String
+  location    String    @default("Remote")
+  url         String    @unique
+  salary      String?
+  type        String    @default("full-time")
+  source      String
+  layer       String    @default("hidden")
+  description String?
+  postedAt    DateTime?
+  scrapedAt   DateTime  @default(now())
+}
