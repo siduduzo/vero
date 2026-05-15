@@ -13,7 +13,9 @@
       "Bash(npx tsc *)",
       "Bash(npm install *)",
       "Bash(npx prisma *)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "PowerShell(npm install *)",
+      "PowerShell(vercel *)"
     ]
   }
 }
