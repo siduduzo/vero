@@ -12,7 +12,8 @@
       "Bash(node *)",
       "Bash(npx tsc *)",
       "Bash(npm install *)",
-      "Bash(npx prisma *)"
+      "Bash(npx prisma *)",
+      "Bash(npm uninstall *)"
     ]
   }
 }
